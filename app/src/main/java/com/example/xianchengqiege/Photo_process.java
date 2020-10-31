@@ -76,7 +76,7 @@ public class Photo_process {
             Imgproc.threshold(temp, bin_img, 0, 255, Imgproc.THRESH_OTSU);//二值化
 
             //bin_img存放二值化的图片
-            src = bin_img;
+            src = bin_img;//为了获取图片的尺寸
             Mat dst = new Mat();
             ////先膨胀后腐蚀,闭运算
             Mat element = getStructuringElement(MORPH_ELLIPSE, new Size(20, 20));//定义结构元素,size要比单灯的大，才效果好
@@ -139,7 +139,7 @@ public class Photo_process {
 
 
             double r1, r2;
-            r1 = banjing(dst1);
+            r1 = banjing(dst1);//调用求取半长轴的函数，求取半长轴
             r2 = banjing(dst2);
             LED_ROI1.a = r1;
             LED_ROI2.a = r2;
@@ -167,7 +167,7 @@ public class Photo_process {
             position ID2 = new position(19, 11, 0, 30);//条纹数多的那个的位置信息
 
             ///ID识别
-
+            //条纹少的所有的图像，位置信息传给LED_ONE,多的传给LED_TWO
             //LED_ROI LEDone,LEDtwo;分别传入条纹数目少的、多的、的ID信息
             LEDone = new LED_ROI(LED_ROI1.ROI, LED_ROI1.LED_ID, LED_ROI1.ID_X, LED_ROI1.ID_Y, LED_ROI1.a);
             LEDtwo = new LED_ROI(LED_ROI1.ROI, LED_ROI1.LED_ID, LED_ROI1.ID_X, LED_ROI1.ID_Y, LED_ROI1.a);
@@ -198,17 +198,17 @@ public class Photo_process {
             //、、、、、、、、、都是按照条纹数目少的、多的的顺序显示的、、、、、、
             System.out.println("图像中两个LED的中心值：*********************************");
             System.out.println("条纹数少的：*********************************");
-            System.out.println(LEDone.ROI.x_mMiddle);
-            System.out.println(LEDone.ROI.y_mMiddle);
+            System.out.println(LEDone.ROI.x_mMiddle);//输出椭圆中心在图像上的位置信息
+            System.out.println(LEDone.ROI.y_mMiddle);//输出椭圆中心在图像上的位置信息
             System.out.println("条纹数多的：*********************************");
-            System.out.println(LEDtwo.ROI.x_mMiddle);
-            System.out.println(LEDtwo.ROI.y_mMiddle);
+            System.out.println(LEDtwo.ROI.x_mMiddle);//输出椭圆中心在图像上的位置信息
+            System.out.println(LEDtwo.ROI.y_mMiddle);//输出椭圆中心在图像上的位置信息
 
 
             System.out.println("2个半长轴的大小：2222222222222222222222222222222222");
-            System.out.println(LEDone.a);
+            System.out.println(LEDone.a);//半长轴输出测试
             System.out.println(LEDtwo.a);
-//            tv1.setText(String.valueOf(LEDone.a));
+//            tv1.setText(String.valueOf(LEDone.a));//之前测试半长轴来着
 //            tv2.setText(String.valueOf(LEDtwo.a));
 //            //  、、、、、、、、、、 下面输出一些检测数据的信息、、、、、、、、、、.
 
@@ -216,7 +216,7 @@ public class Photo_process {
             //焦距
             double f = 1.8;   //华为相机焦距，
             //f = f * 312.5;   //3.2e3的倒数,将f直接变过去，跟像素一个单位
-            f=520;
+            f=520;//这里原来是1.8*312.5=562.5，经过测试，可能520效果好一些，可能还需要根据相机进行更改
             //透镜焦点在image sensor上的位置
             double Center_X = width1;    ///////上面已经看过了，就是图像的中心(320,240)
             double Center_Y = height1;
@@ -228,9 +228,9 @@ public class Photo_process {
             double t11 = (double) Math.toDegrees(prefValues[1]);//   [1]为pitch，绕手机长轴
             double t22 = (double) Math.toDegrees(prefValues[2]);//   [1]为roll，绕手机短轴
             t11 = Math.abs(t11 / 180 * Math.PI);//先求出两个角的余弦值
-            t22 = Math.abs(t22 / 180 * Math.PI);
+            t22 = Math.abs(t22 / 180 * Math.PI);//先求出两个角的余弦值
             double t33 = Math.cos(t11) * Math.cos(t22);  //得到成像平面与水平面的夹角的余弦值
-            double t = Math.acos(t33);          //利用反三角函数，求成像平面与竖直线的夹角，单位为弧度制（0-2pi）
+            double t = Math.acos(t33);//利用反三角函数，求成像平面与水平面的夹角，单位为弧度制（0-2pi）
             System.out.println("与竖直线夹角~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~··");
             System.out.println(t * 57.3);
 
@@ -270,6 +270,7 @@ public class Photo_process {
 
             }
 
+            //然后选出差值最小的两个Z求平均，作为最终Z坐标
             switch (d) {
                 case 0:
                     Z = (z11 + z21) / 2;
@@ -306,7 +307,7 @@ public class Photo_process {
             double X2 = 0;
             double Y2 = 0;
 
-            double i1 = LEDone.ROI.x_mMiddle;
+            double i1 = LEDone.ROI.x_mMiddle;//存放双灯的椭圆中心坐标
             double j1 = LEDone.ROI.y_mMiddle;
             double i2 = LEDtwo.ROI.x_mMiddle;
             double j2 = LEDtwo.ROI.y_mMiddle;
@@ -316,14 +317,23 @@ public class Photo_process {
             double x2 = LEDtwo.ID_X;
             double y2 = LEDtwo.ID_Y;
 
-
-            //下面是求解连立方程
-            double a1 = LEDone.a;
+            double a1 = LEDone.a;//双灯的半长轴
             double a2 = LEDtwo.a;
 
+            //下面是求解连立方程
+
+            //计算镜头中心到双灯的真实距离，并用徐海鑫的纠正方程加以纠正
+            double L1=Math.sqrt(f * f + (i1 - Center_X) * (i1 - Center_X) + (j1 - Center_Y) * (j1 - Center_Y));
+            double L2=Math.sqrt(f * f + (i2 - Center_X) * (i2 - Center_X) + (j2 - Center_Y) * (j2 - Center_Y));
+            //进行纠正
+            double s1=Math.sqrt((i1 - Center_X) * (i1 - Center_X) + (j1 - Center_Y) * (j1 - Center_Y))/312.5;
+            L1=L1/(1-0.047*s1);
+            double s2=Math.sqrt((i2 - Center_X) * (i2 - Center_X) + (j2 - Center_Y) * (j2 - Center_Y))/312.5;
+            L2=L2/(1-0.047*s2);
+
             //m，n是为了方便解方程，中间计算过程的数据
-            double m = (Math.pow((r / a1), 2) * (f * f + (i1 - Center_X) * (i1 - Center_X) + (j1 - Center_Y) * (j1 - Center_Y)) - Z * Z);
-            double n = (Math.pow((r / a2), 2) * (f * f + (i2 - Center_X) * (i2 - Center_X) + (j2 - Center_Y) * (j2 - Center_Y)) - Z * Z);
+            double m = (Math.pow((r / a1), 2) * L1*L1 - Z * Z);
+            double n = (Math.pow((r / a2), 2) * L2*L2 - Z * Z);
 
 
             //由于灯具不同的坐标设置，有可能在求解方程组的时候，分母可能为0
@@ -370,6 +380,7 @@ public class Photo_process {
             System.out.println(X2);
             System.out.println(Y2);
 
+            //下面是根据角度选择出正确解的过程
 
             double t1 = Math.atan2((y2 - y1), (x2 - x1));//用于坐标转换的角度(第一个考虑点)//双灯与X轴夹角，弧度制，范围-PI~PI，逆时针为正方向
             //注意，一定是2-1，反了的话就错了
@@ -465,7 +476,7 @@ public class Photo_process {
 
             int t222 = (int) t22;
 //            tv00.append(" 左右=");
-//            tv00.append(String.valueOf(t222));
+//            tv00.append(String.valueOf(t222));1
             if (t22 >= 0) {          //手机右侧倾斜
                 if (t3 > 90 && t3 < 270)      //反向，选左侧的
                 {
