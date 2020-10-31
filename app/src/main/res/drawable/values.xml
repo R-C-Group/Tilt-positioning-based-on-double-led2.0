@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <!-- shape with circle-top corner -->
+        <shape>
+            <!-- the shape background color -->
+            <solid android:color="#E4ACDCE6"/>
+            <corners android:topLeftRadius="20dp" android:topRightRadius="20dp"
+                android:bottomLeftRadius="20dp" android:bottomRightRadius="20dp"/>
+
+        </shape>
+    </item>
+</layer-list>
