@@ -39,7 +39,7 @@ public class Photo_process {
 
 
 
-    private double r = 5.25;
+    private double r = 8.75;
     public Bitmap selectbp;
 
 
@@ -164,7 +164,7 @@ public class Photo_process {
             //!!! （这里不用理会max与min）
             // !!!（只需要改变两支灯的坐标位置X,Y）
             position ID1 = new position(10, 0, 0, 0);//条纹数少的那个灯的位置信息
-            position ID2 = new position(19, 11, 0, 30);//条纹数多的那个的位置信息
+            position ID2 = new position(19, 11, 0, 40);//条纹数多的那个的位置信息
 
             ///ID识别
             //条纹少的所有的图像，位置信息传给LED_ONE,多的传给LED_TWO
@@ -224,7 +224,7 @@ public class Photo_process {
 
 
             //定义灯半径
-            double r = 5.25;     //如果换灯具的话需要改，单位是cm
+            double r = 8.75;     //如果换灯具的话需要改，单位是cm
             double t11 = (double) Math.toDegrees(prefValues[1]);//   [1]为pitch，绕手机长轴
             double t22 = (double) Math.toDegrees(prefValues[2]);//   [1]为roll，绕手机短轴
             t11 = Math.abs(t11 / 180 * Math.PI);//先求出两个角的余弦值

@@ -61,7 +61,7 @@ public class MapLayout extends FrameLayout  {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if(!once){
             map = new ImgView(getContext());
-            map.setImageResource(R.drawable.map1);
+            map.setImageResource(R.drawable.map2);
             LayoutParams lp1 = new LayoutParams(LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             lp1.height= (int) height_v;
             lp1.width= (int) width_v;
